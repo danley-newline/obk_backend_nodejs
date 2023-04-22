@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
-import productRoute from './routes/products.js'
-import roomsRoute from './routes/rooms.js'
+import productsRoute from './routes/products.js'
+import creditsRoute from './routes/credits.js'
 import cookieParser from "cookie-parser";
 import cors from "cors"
 
@@ -42,8 +42,8 @@ app.use(
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
-app.use("/api/product", productRoute);
-app.use("/api/rooms", roomsRoute);
+app.use("/api/product", productsRoute);
+app.use("/api/credit", creditsRoute);
 
 
 
