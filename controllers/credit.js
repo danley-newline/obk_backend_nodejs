@@ -14,7 +14,6 @@ export const createCredit = async (req, res, next) => {
     postedCredit.isGranted = postedCredit.montant <= product.maxAmount ? true : false;
     postedCredit.limitDate = new Date(postedCredit.limitDate);
 
-    console.log(product);
 
     const newCredit = new Credit(postedCredit);
 
@@ -28,7 +27,7 @@ export const createCredit = async (req, res, next) => {
 
     return res.status(404).json({
       status: 404,
-      message: `L'id du produit est introuvable ! Veuillez verifier l'identifiant 🙆‍♂️ ${error}`
+      message: `Product Id is unknow , check it ! 🙆‍♂️ ${error}`
   });
   }
 
@@ -40,7 +39,7 @@ export const deleteCredit = async (req, res, next) => {
     await Credit.findByIdAndDelete(
       req.params.id
       );
-    res.status(200).json("Product has been delected!");
+    res.status(200).json("Credit has been delected!");
   } catch (err) {
 
   next(err);
@@ -60,16 +59,24 @@ export const getCredit = async (req, res, next) => {
 
 export const getCredits = async (req, res, next) => {
     try {
-        let credits = await Credit.find();
+      let credits = await Credit.find();
+      let creditList = [];
 
-        // credits.map((e) => {
-        //   e.productId
-        // })
+      for (let credit of credits) {
+        const productId = credit.productId;
 
-        const datas = {
-          count: credits.length,
-          data: credits
+        const product = await Product.findOne({ _id: productId });
+
+        if (product) {
+          credit.product = product;
+          creditList.push(credit);
         }
+      }
+
+      const datas = {
+        count: creditList.length,
+        data: creditList
+      };
         res.status(200).json(datas);
       } catch (err) {
       next(err);
