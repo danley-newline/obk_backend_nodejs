@@ -3,37 +3,34 @@ import Product from "../models/Product.js";
 
 export const createCredit = async (req, res, next) => {
 
-    try {
+    
+  try {
+    let postedCredit = req.body;
 
-      let postedCredit = req.body;
+    let product = await Product.findById(
+      req.body.productId
+    );
 
-      try {
-        let product = await Product.findById(
-          req.body.productId
-        );
+    postedCredit.isGranted = postedCredit.montant <= product.maxAmount ? true : false;
+    postedCredit.limitDate = new Date(postedCredit.limitDate);
 
-        postedCredit.isGranted = postedCredit.montant <= product.maxAmount ? true : false;
-        postedCredit.limitDate = new Date(postedCredit.limitDate);
+    console.log(product);
 
-        console.log(product);
+    const newCredit = new Credit(postedCredit);
 
-        const newCredit = new Credit(postedCredit);
+    let saveCredit = await newCredit.save();
+    saveCredit.product = product;
 
-        let saveCredit = await newCredit.save();
-        saveCredit.product = product;
-
-        res.status(201).json(saveCredit);
+    res.status(201).json(saveCredit);
 
 
-      } catch (error) {
-        console.log("OK ", error);
-        return res.status(404).json(error)
-      }
+  } catch (error) {
 
-      
-    } catch (err) {
-      next(err);
-    }
+    return res.status(404).json({
+      status: 404,
+      message: `L'id du produit est introuvable ! Veuillez verifier l'identifiant 🙆‍♂️ ${error}`
+  });
+  }
 
 }
 
@@ -63,7 +60,11 @@ export const getCredit = async (req, res, next) => {
 
 export const getCredits = async (req, res, next) => {
     try {
-        const credits = await Credit.find();
+        let credits = await Credit.find();
+
+        // credits.map((e) => {
+        //   e.productId
+        // })
 
         const datas = {
           count: credits.length,
