@@ -27,8 +27,7 @@ const CreditSchema = new mongoose.Schema({
     },
     product: {
         type: Object,
-        required: true,
-      }
+    },
 },
 { timestamps: true }
 );

@@ -3,31 +3,34 @@ import Product from "../models/Product.js";
 
 export const createCredit = async (req, res, next) => {
 
-    // const newCredit = new Credit(req.body);
-
-    // let product = req.body.productId;
-    // const product = await Product.findById(
-    //   req.body.productId
-    // );
-
-
-    let postedCredit = req.body;
-
-    const findProduct = await Product.findOne({code: postedCredit.product.code})
-    if(!findProduct) return res.status(404).json("Produit introuvable, erreur sur le nom!")
-
-    postedCredit.isGranted = postedCredit.montant <= postedCredit.product.maxAmount ? true : false;
-    postedCredit.productId = postedCredit.product._id;
-    postedCredit.product = postedCredit.product;
-    postedCredit.limitDate = new Date(postedCredit.limitDate);
-
-    const newCredit = new Credit(postedCredit);
-
-
     try {
-      let saveCredit = await newCredit.save();
 
-      res.status(201).json(saveCredit);
+      let postedCredit = req.body;
+
+      try {
+        let product = await Product.findById(
+          req.body.productId
+        );
+
+        postedCredit.isGranted = postedCredit.montant <= product.maxAmount ? true : false;
+        postedCredit.limitDate = new Date(postedCredit.limitDate);
+
+        console.log(product);
+
+        const newCredit = new Credit(postedCredit);
+
+        let saveCredit = await newCredit.save();
+        saveCredit.product = product;
+
+        res.status(201).json(saveCredit);
+
+
+      } catch (error) {
+        console.log("OK ", error);
+        return res.status(404).json(error)
+      }
+
+      
     } catch (err) {
       next(err);
     }
