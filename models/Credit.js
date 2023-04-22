@@ -9,7 +9,7 @@ const CreditSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    statut: {
+    isGranted: {
         type: Boolean,
         required: false,
     },
@@ -23,6 +23,10 @@ const CreditSchema = new mongoose.Schema({
     },
     productId: {
         type: String,
+        required: true,
+    },
+    product: {
+        type: Object,
         required: true,
       }
 },

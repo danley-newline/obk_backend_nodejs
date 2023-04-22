@@ -3,11 +3,26 @@ import Product from "../models/Product.js";
 
 export const createCredit = async (req, res, next) => {
 
-    const newCredit = new Credit(req.body);
+    // const newCredit = new Credit(req.body);
 
     // let product = req.body.productId;
+    // const product = await Product.findById(
+    //   req.body.productId
+    // );
 
-    // return console.log("HOLA ", product);
+
+    let postedCredit = req.body;
+
+    const findProduct = await Product.findOne({code: postedCredit.product.code})
+    if(!findProduct) return res.status(404).json("Produit introuvable, erreur sur le nom!")
+
+    postedCredit.isGranted = postedCredit.montant <= postedCredit.product.maxAmount ? true : false;
+    postedCredit.productId = postedCredit.product._id;
+    postedCredit.product = postedCredit.product;
+    postedCredit.limitDate = new Date(postedCredit.limitDate);
+
+    const newCredit = new Credit(postedCredit);
+
 
     try {
       let saveCredit = await newCredit.save();
