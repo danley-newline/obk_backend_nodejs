@@ -53,7 +53,7 @@ export const getProducts = async (req, res, next) => {
 
     const datas = {
       count: product.length,
-      data: product
+      data: product.reverse()
     }
     res.status(200).json(datas);
   } catch (err) {

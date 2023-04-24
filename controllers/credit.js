@@ -75,7 +75,7 @@ export const getCredits = async (req, res, next) => {
 
       const datas = {
         count: creditList.length,
-        data: creditList
+        data: creditList.reverse()
       };
         res.status(200).json(datas);
       } catch (err) {
