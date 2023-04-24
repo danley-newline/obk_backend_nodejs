@@ -10,10 +10,10 @@ router.post("/", createCredit);
 //UPDATE
 
 //DELETE
-router.delete("/:id", deleteCredit);
+router.delete("/:id", verifyUser, deleteCredit);
 
 //GET 
-router.get("/:id", getCredit);
+router.get("/:id",verifyUser, getCredit);
 
 
 //GET ALL

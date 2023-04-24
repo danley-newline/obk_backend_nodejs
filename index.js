@@ -34,29 +34,15 @@ mongoose.connection.on("connected", ()=>{
 app.use(cookieParser())
 app.use(express.json())
 
-// app.use(
-//     cors({
-//     origin: "http://localhost:8080",
-// }));
-
-
-const allowedOrigins = [
-    'http://localhost:8800',
-    'http://localhost:8080',
-    'http://localhost:8081',
-    'http://localhost:4200',
-  ];
-  
-  app.use(cors({
-    origin: function (origin, callback) {
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    }
-  }));
-
+app.use(
+    cors({
+    origin: [
+        'http://localhost:8800',
+        'http://localhost:8080',
+        'http://localhost:8081',
+        'http://localhost:4200',
+    ]
+}));
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);

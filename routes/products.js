@@ -1,17 +1,17 @@
 import express from "express";
 import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from "../controllers/Product.js";
-import { verifyToken , verifyUser } from "../utils/verifyToken.js";
+import { verifyUser } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
 //CREATE
-router.post("/",  createProduct);
+router.post("/", verifyUser, createProduct);
 
 //UPDATE
-router.put("/:id",  updateProduct);
+router.put("/:id", verifyUser, updateProduct);
 
 //DELETE
-router.delete("/:id", deleteProduct);
+router.delete("/:id", verifyUser, deleteProduct);
 
 //GET 
 router.get("/find/:id", getProduct);
