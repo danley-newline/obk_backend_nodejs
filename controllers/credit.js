@@ -3,8 +3,23 @@ import Product from "../models/Product.js";
 
 export const createCredit = async (req, res, next) => {
 
-    
   try {
+
+    //TEST DE SECURITE
+    if(
+      req.body.numeroClient.length > 10 || 
+      req.body.numeroClient.length < 10 || 
+      req.body.montant <= 0 || 
+      req.body.limitDate.length < 10 ||
+      req.body.limitDate.length > 10 ||
+      req.body.productId.length > 256 ||
+      req.body.productId.length === 0
+  ) {
+      return res.status(404).json("Oops a problem occurred")
+  }
+
+
+
     let postedCredit = req.body;
 
     let product = await Product.findById(

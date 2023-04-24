@@ -4,8 +4,24 @@ import jwt from "jsonwebtoken"
 
 export const register = async (req, res, next) => {
     try {
+
+        //TEST DE SECURITE
+        if(
+            req.body.password.length > 256 || 
+            req.body.username.length > 256 || 
+            req.body.email.length > 256 || 
+            req.body.password.length === 0 ||
+            req.body.username.length === 0 ||
+            req.body.email.length === 0 
+        ) {
+            return res.status(404).json("Oops a problem occurred")
+        }
+
+
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt);
+
+
 
         const newUser = new User({
             username: req.body.username,
@@ -25,6 +41,18 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
     try {
+        
+        //TEST DE SECURITE
+        if(
+            req.body.password.length > 256 || 
+            req.body.username.length > 256 || 
+            req.body.password.length === 0 ||
+            req.body.username.length === 0 
+        ) {
+            return res.status(404).json("Oops a problem occurred")
+        }
+
+
         const user = await User.findOne({username: req.body.username})
         if(!user) return res.status(404).json("User not found")
 
