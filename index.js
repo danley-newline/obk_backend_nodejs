@@ -41,6 +41,7 @@ app.use(express.json())
 
 
 const allowedOrigins = [
+    'http://localhost:8800',
     'http://localhost:8080',
     'http://localhost:8081',
     'http://localhost:4200',

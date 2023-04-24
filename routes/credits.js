@@ -17,6 +17,6 @@ router.get("/:id", getCredit);
 
 
 //GET ALL
-router.get("/",  getCredits);
+router.get("/", verifyUser, getCredits);
 
 export default router;
