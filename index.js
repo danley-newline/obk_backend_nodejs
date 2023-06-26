@@ -11,8 +11,6 @@ import path from "path";
 import multer from "multer";
 
 
-
-
 const app = express();
 dotenv.config()
 
@@ -35,6 +33,7 @@ mongoose.connection.on("connected", ()=>{
 //middlewares
 app.use(cookieParser())
 app.use(express.json())
+app.use('/uploads', express.static('uploads'))
 
 app.use(
     cors({
@@ -66,8 +65,8 @@ const upload = multer({storage: storage});
 
 app.post("/api/upload", upload.single('file'), (req,res) => {
   const file = req.file;
-  console.log(file);
-  res.status(200).json(file.filename);
+
+  res.status(200).json(file);
 
 })
 
