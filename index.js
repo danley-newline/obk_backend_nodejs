@@ -7,6 +7,8 @@ import productsRoute from './routes/products.js'
 import creditsRoute from './routes/credits.js'
 import cookieParser from "cookie-parser";
 import cors from "cors"
+import path from "path";
+import multer from "multer";
 
 
 
@@ -48,6 +50,27 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/product", productsRoute);
 app.use("/api/credit", creditsRoute);
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({storage: storage});
+
+app.post("/api/upload", upload.single('file'), (req,res) => {
+  const file = req.file;
+  console.log(file);
+  res.status(200).json(file.filename);
+
+})
+
 
 
 
